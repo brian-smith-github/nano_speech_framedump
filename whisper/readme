@@ -1,0 +1,4 @@
+test stuff for the 8-bit Arduino Nano I guess.
+
+1) run serial_read/go to dump frames to /tmp/a.raw
+2) ./doit (strips first few and last lines from /tmp/a.raw to f2.txt

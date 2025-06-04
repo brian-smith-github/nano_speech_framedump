@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# remove first 3 lines from /tmp/a.raw
+sed '1,3d' /tmp/a.raw > f.txt
+# remove last line also.....
+sed '$d' f.txt > f2.txt
+echo "working... (takes longer with big models)"
+./go  # generate /tmp/mel80 - 3000 frames of 80 log-mel levels
+cp /tmp/mel80 archive/data/0
+zip -r a.zip archive > /dev/null 2>&1
+mv -f a.zip file2.pt
+python go.py 2>/dev/null

@@ -1,0 +1,8 @@
+This just sets up a 6400 times/sec interrupt.
+On reciving an interrupt it reads the ADC and writes the (preemph/delta) data
+as 8-bits down the serial bus.
+The serial_read/ code can read this and convert it to RAW audio which 
+the 'sox' app can convert to regular WAV format to listen back to.
+
+(the audio quality with my current simple setup is currently arocious,
+I can barely get Whisper to properly transcribe it!)

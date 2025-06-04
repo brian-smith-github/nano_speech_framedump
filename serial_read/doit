@@ -1,0 +1,4 @@
+#!/bin/bash
+sox  -r 6400 -c 1 -b8 -esigned /tmp/a.raw  -r 8000 -c 1 -b16 -esigned /tmp/b.raw
+sox  -r 8000 -c 1 -b16 -esigned /tmp/b.raw  -r 16000 /tmp/a16.wav # no de-emphasis version
+mplayer /tmp/a16.wav
