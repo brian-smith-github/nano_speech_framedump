@@ -17,7 +17,7 @@ int8_t window[FFT]={0,0,0,0,1,1,1,2,2,3,3,4,5,5,6,7,8,9,10,10,11,12,13,14,15,16,
 int8_t f[FFT], f2[FFT], min, max;
 
 int re[FFT+10], im[FFT], tr[FF2], ti[FF2];
-int count = 0, lock = 0;
+int count = FFT/2;
 
 const int AUDIO_IN = A7;
 
@@ -362,9 +362,15 @@ ISR(TIMER0_COMPA_vect) {
   i += ADCH << 8;
   x = i - prev; prev = i;  y = x;
   //bitSet(ADCSRA, ADIF); // clear the flag
-  f[count] = y; count++;
-  //Serial.write(y);
-  bitSet(ADCSRA, ADSC); // start next ADC conversion
+  
+  if (count==0 || count>=FFT) {
+    count=0;
+    Serial.println("oops!");
+  } else {
+    f[count] = y; count++;
+    //Serial.write(y);
+    bitSet(ADCSRA, ADSC); // start next ADC conversion
+  }
 }
 
 
@@ -374,11 +380,7 @@ void loop() {
   int max3;
 
   // check for next 64 samples having been read (10ms passed)....
-  if (count >= FFT) { // check lock, scale and window frame, run an FFT,
-    if (lock == 1) {
-      Serial.println("oops!");
-    }
-    lock = 1;
+  if (count >= FFT) { // scale and window frame, run an FFT,
     count = FFT / 2;  // rewind frame counter 64 samples
     // get min/max of f buffer....
     min = 127; max = -127;
@@ -425,8 +427,6 @@ void loop() {
       if (top>40) {re[top+6]=0; re[top-6]=0;}
       if (top>60) {re[top+8]=0; re[top-8]=0;}
     }
-
     Serial.print("\n");
-    lock = 0;
   }
 }
